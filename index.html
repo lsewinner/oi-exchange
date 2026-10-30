@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>OI EXCHANGE — 双方协作工作台</title>
+  <style>
+    :root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#f4f4f0;background:#090d14}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 80% -10%,#28384e 0,transparent 34%),#090d14}button,input,textarea,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.45;cursor:not-allowed}a{color:inherit}.wrap{max-width:1120px;margin:auto;padding:0 24px}header{border-bottom:1px solid #ffffff1c;background:#0b1019bb;backdrop-filter:blur(12px)}header .wrap{display:flex;justify-content:space-between;align-items:center;min-height:76px;gap:16px}.brand{font-weight:800;letter-spacing:.15em;font-size:15px}.brand i{display:inline-block;width:12px;height:12px;border:2px solid #b5e6d1;transform:rotate(45deg);margin-right:10px}.tag,.muted{color:#a7b2bf}.tag{font-size:12px;border:1px solid #ffffff30;border-radius:40px;padding:8px 12px}.hero{padding:68px 0 30px}.eyebrow{color:#aee2c8;font-size:12px;letter-spacing:.18em;font-weight:700}.hero h1{max-width:810px;font-size:clamp(32px,5.5vw,64px);letter-spacing:-.05em;line-height:1.12;margin:20px 0}.hero p{max-width:720px;line-height:1.8;color:#b3becb;font-size:16px}.notice{padding:14px 18px;border:1px solid #c8a96869;border-radius:12px;color:#e7d5ad;background:#45341835;font-size:13px;line-height:1.6;margin:22px 0}.grid{display:grid;grid-template-columns:360px minmax(0,1fr);gap:20px;align-items:start}.card{border:1px solid #ffffff1b;border-radius:18px;background:#131a24e8;padding:24px;margin-bottom:20px;box-shadow:0 12px 45px #0002}.card h2{font-size:19px;margin:0 0 10px;letter-spacing:-.02em}.card h3{font-size:15px;margin:20px 0 8px}.card p{line-height:1.7}.small{font-size:13px;color:#a5b2c0;line-height:1.6}.field{display:block;color:#ced6df;font-size:13px;font-weight:600;margin-top:16px}.field input,.field textarea,.field select,select.project{display:block;width:100%;margin-top:8px;background:#0c121b;color:#f5f6f4;border:1px solid #394656;border-radius:9px;padding:11px 12px;outline:none}.field textarea{min-height:88px;resize:vertical}.field input:focus,.field textarea:focus,.field select:focus,select.project:focus{border-color:#9ad8bb}.field small{display:block;color:#8493a2;font-weight:400;margin-top:6px}button.primary{background:#b6e6cd;color:#11221c;border:0;border-radius:9px;padding:11px 16px;font-weight:800;margin-top:18px}button.secondary{border:1px solid #576676;background:transparent;color:#edf2f4;border-radius:9px;padding:10px 13px;margin-top:12px}button.secondary:hover{border-color:#b6e6cd}button.danger{border-color:#b86969;color:#f1aaaa}.row{display:flex;justify-content:space-between;gap:15px;align-items:center;flex-wrap:wrap}.pill{border:1px solid #71b99c88;border-radius:30px;color:#b6e6cd;padding:5px 9px;font-size:12px}.statline{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}.stat{background:#0c121b;border:1px solid #ffffff18;border-radius:10px;padding:12px 15px;flex:1;min-width:110px}.stat strong{display:block;font-size:24px}.stat span{color:#9facb9;font-size:12px}.data{background:#0e141e;border:1px solid #ffffff16;border-radius:12px;padding:14px 16px;margin:12px 0;overflow-wrap:anywhere}.data b{display:block;font-size:12px;color:#b6e6cd;margin-bottom:6px}.data p{margin:0;white-space:pre-wrap;font-size:14px}.item{border-top:1px solid #ffffff1c;padding:18px 0}.item:first-child{border-top:0}.item h3{margin:0 0 6px}.item .small{margin:5px 0}.item pre{white-space:pre-wrap;overflow-wrap:anywhere;color:#dce9e3;background:#0b1219;border-radius:9px;padding:14px;font:13px/1.65 ui-monospace,SFMono-Regular,Consolas,monospace}.item .actions{display:flex;gap:10px;flex-wrap:wrap}.item .actions button{margin:4px 0 0}.empty{color:#9facb9;padding:30px 5px}.hidden{display:none!important}footer{padding:36px 0 55px;color:#8998a8;font-size:12px}.log{margin:0;padding:0 0 0 22px}.log li{margin:10px 0;color:#cad2dc;line-height:1.5}.log time{color:#8292a2;font-size:12px;margin-right:8px}.alert{color:#ffbcbc;font-size:13px;min-height:18px}.project{max-width:330px}select.project{margin:0}.sectiontitle{margin:34px 0 15px}.footnote{color:#8998a8;font-size:12px;margin-top:15px}@media(max-width:800px){.grid{grid-template-columns:1fr}.hero{padding-top:44px}.card{padding:20px}.project{max-width:none}}
+  </style>
+</head>
+<body>
+  <header><div class="wrap"><div class="brand"><i aria-hidden="true"></i> OI EXCHANGE</div><span class="tag">独立 App · 本地演示版</span></div></header>
+  <main class="wrap">
+    <section class="hero"><div class="eyebrow">THE AGREED SPACE BETWEEN TWO SIDES</div><h1>让双方的 AI，在明确边界内协作。</h1><p>把目标、可共享的信息和验收标准放进同一个项目空间。先约定，再交接；关键决定由人确认，过程留下可回看的记录。</p></section>
+    <div class="notice" role="note">这是产品交互原型，不是正式协作平台。角色切换只是模拟，不代表身份认证；“AI 草案”由固定模板生成，不会调用模型或向对方发送消息。数据仅保存在本浏览器的 localStorage，勿输入敏感或真实合同信息。</div>
+    <div class="grid">
+      <aside>
+        <section class="card"><h2>01 / 建立项目</h2><p class="small">填写双方约定的最小范围，创建一个本地演示工作区。</p>
+          <form id="project-form">
+            <label class="field">项目名称<input name="name" required maxlength="80" placeholder="例如：联合研究项目"></label>
+            <label class="field">甲方名称<input name="partyA" required maxlength="60" placeholder="例如：委托方"></label>
+            <label class="field">乙方名称<input name="partyB" required maxlength="60" placeholder="例如：合作方"></label>
+            <label class="field">共同目标<textarea name="goal" required maxlength="600" placeholder="希望双方完成什么？"></textarea></label>
+            <label class="field">允许共享的范围<textarea name="scope" required maxlength="600" placeholder="哪些信息可以进入双方工作区？"></textarea></label>
+            <label class="field">交付与验收标准<textarea name="deliverable" required maxlength="600" placeholder="什么成果算完成？谁确认？"></textarea></label>
+            <button class="primary" type="submit">创建演示项目</button><p id="project-error" class="alert" role="alert"></p>
+          </form><button id="demo" class="secondary" type="button">载入明确标注的示例项目</button>
+        </section>
+        <section class="card"><h2>使用边界</h2><p class="small">本版没有账号、实时同步、真实 AI、自动审批或对外 API。Oxford Bot 可在以后通过受控工具对接，不是本版的依赖。</p></section>
+      </aside>
+      <div>
+        <section class="card"><div class="row"><div><h2>02 / 项目工作区</h2><p class="small">查看双方约定与待审批的模拟交接。</p></div><select id="project-select" class="project" aria-label="选择项目"></select></div>
+          <div id="no-project" class="empty">还没有项目。请先在左侧建立，或载入示例。</div>
+          <div id="workspace" class="hidden">
+            <div id="overview"></div>
+            <label class="field">模拟当前操作方<select id="actor"><option value="A">甲方</option><option value="B">乙方</option></select><small>任何人都能切换；这不是真实的身份验证或授权。</small></label>
+          </div>
+        </section>
+        <section id="handoff-card" class="card hidden"><h2>03 / 提出交接请求</h2><p class="small">以当前操作方名义生成一份固定模板草案，由另一方模拟审批。不会自动发送，也不会执行任务。</p>
+          <form id="handoff-form"><label class="field">待协作任务<textarea name="task" required maxlength="500" placeholder="描述需要对方确认的具体任务"></textarea></label><button class="primary" type="submit">生成草案并提交模拟审批</button><p id="handoff-error" class="alert" role="alert"></p></form>
+          <h3 class="sectiontitle">交接列表</h3><div id="handoffs"></div>
+        </section>
+        <section id="audit-card" class="card hidden"><h2>04 / 操作记录</h2><p class="small">仅记录此浏览器中的演示操作，不是不可篡改的审计日志。</p><ol id="audit" class="log"></ol><button id="clear-project" class="secondary danger" type="button">删除当前本地项目</button></section>
+      </div>
+    </div>
+  </main><footer class="wrap">OI EXCHANGE · 产品交互原型 · 本地数据不跨设备同步</footer>
+  <script>
+    (()=>{'use strict';
+      const KEY='oi-exchange-demo-v1';
+      const $=s=>document.querySelector(s);
+      const node=(tag,cls,text)=>{const el=document.createElement(tag);if(cls)el.className=cls;if(text!==undefined)el.textContent=text;return el};
+      const state=load();let selected=state.projects[0]?.id||null;
+      function load(){try{const v=JSON.parse(localStorage.getItem(KEY)||'{}');return {projects:Array.isArray(v.projects)?v.projects:[]}}catch{return {projects:[]}}}
+      function save(){try{localStorage.setItem(KEY,JSON.stringify(state));return true}catch{return false}}
+      function id(){return typeof crypto!=='undefined'&&crypto.randomUUID?crypto.randomUUID():`${Date.now()}-${Math.random().toString(36).slice(2)}`}
+      function current(){return state.projects.find(p=>p.id===selected)}
+      function log(p,message){p.audit.unshift({id:id(),at:new Date().toISOString(),message})}
+      function addData(parent,label,value){const box=node('div','data');box.append(node('b','',label),node('p','',value));parent.append(box)}
+      function party(p,side){return side==='A'?p.partyA:p.partyB}
+      function render(){const p=current(),select=$('#project-select');select.replaceChildren();if(!state.projects.length){const option=new Option('暂无项目','');select.add(option)}else{state.projects.forEach(item=>select.add(new Option(item.name,item.id)));select.value=p?.id||state.projects[0].id}
+        $('#no-project').classList.toggle('hidden',!!p);['#workspace','#handoff-card','#audit-card'].forEach(s=>$(s).classList.toggle('hidden',!p));if(!p)return;
+        const overview=$('#overview');overview.replaceChildren();const head=node('div','row'),left=node('div');left.append(node('h2','',p.name),node('div','small',`${p.partyA} ↔ ${p.partyB}`));head.append(left,node('span','pill',p.example?'示例项目 · 模拟':'本地项目 · 模拟'));overview.append(head);
+        const stats=node('div','statline');[['交接请求',p.handoffs.length],['待审批',p.handoffs.filter(h=>h.status==='pending').length],['已批准',p.handoffs.filter(h=>h.status==='approved').length]].forEach(([label,count])=>{const item=node('div','stat');item.append(node('strong','',String(count)),node('span','',label));stats.append(item)});overview.append(stats);
+        addData(overview,'共同目标',p.goal);addData(overview,'允许共享的范围',p.scope);addData(overview,'交付与验收标准',p.deliverable);
+        const actor=$('#actor');actor.options[0].textContent=`甲方 · ${p.partyA}`;actor.options[1].textContent=`乙方 · ${p.partyB}`;renderHandoffs(p);renderAudit(p)
+      }
+      function renderHandoffs(p){const box=$('#handoffs');box.replaceChildren();if(!p.handoffs.length){box.append(node('div','empty','暂无交接请求。可填写任务生成模拟草案。'));return}
+        [...p.handoffs].reverse().forEach(h=>{const item=node('article','item');item.append(node('h3','',h.task),node('p','small',`${party(p,h.from)} → ${party(p,h.to)} · ${h.status==='pending'?'待对方审批':h.status==='approved'?'已模拟批准':'已模拟拒绝'}`));item.append(node('pre','',h.draft));if(h.status==='pending'){const actions=node('div','actions');['approved','rejected'].forEach(status=>{const b=node('button','secondary'+(status==='rejected'?' danger':''),status==='approved'?'模拟批准':'模拟拒绝');b.type='button';b.disabled=$('#actor').value!==h.to;b.addEventListener('click',()=>decide(p.id,h.id,status));actions.append(b)});item.append(actions,node('div','footnote',`切换为 ${party(p,h.to)} 才能在本地模拟审批；并无真实权限校验。`))}box.append(item)})
+      }
+      function renderAudit(p){const box=$('#audit');box.replaceChildren();p.audit.forEach(entry=>{const li=node('li');const t=node('time','',new Date(entry.at).toLocaleString('zh-CN'));t.dateTime=entry.at;li.append(t,document.createTextNode(entry.message));box.append(li)})}
+      function decide(projectId,handoffId,status){const p=state.projects.find(x=>x.id===projectId),h=p?.handoffs.find(x=>x.id===handoffId);if(!p||!h||h.status!=='pending'||$('#actor').value!==h.to)return;h.status=status;log(p,`${party(p,h.to)}${status==='approved'?'模拟批准':'模拟拒绝'}了「${h.task}」`);if(!save()){h.status='pending';p.audit.shift();alert('本地存储不可用，操作未保存。');return}render()}
+      $('#project-form').addEventListener('submit',e=>{e.preventDefault();const form=e.currentTarget,d=Object.fromEntries(new FormData(form));const p={id:id(),name:d.name.trim(),partyA:d.partyA.trim(),partyB:d.partyB.trim(),goal:d.goal.trim(),scope:d.scope.trim(),deliverable:d.deliverable.trim(),example:false,handoffs:[],audit:[]};if([p.name,p.partyA,p.partyB,p.goal,p.scope,p.deliverable].some(v=>!v))return;log(p,'创建本地演示项目');state.projects.push(p);if(!save()){state.projects.pop();$('#project-error').textContent='浏览器存储不可用，未创建项目。';return}selected=p.id;$('#project-error').textContent='';form.reset();render()});
+      $('#demo').addEventListener('click',()=>{const p={id:id(),name:'示例：联合研究交付',partyA:'示例委托方',partyB:'示例研究方',goal:'共同完成一份研究提纲，并在双方确认后推进。',scope:'仅共享公开资料、已获双方同意的研究摘要；不共享个人数据或未授权文件。',deliverable:'一份含研究问题、方法与时间安排的提纲；双方分别确认后才视为通过。',example:true,handoffs:[],audit:[]};log(p,'载入示例项目（所有名称与内容均为虚构演示）');state.projects.push(p);if(!save()){state.projects.pop();alert('浏览器存储不可用，无法载入示例。');return}selected=p.id;render()});
+      $('#project-select').addEventListener('change',e=>{selected=e.target.value;$('#actor').value='A';render()});$('#actor').addEventListener('change',()=>{const p=current();if(p)renderHandoffs(p)});
+      $('#handoff-form').addEventListener('submit',e=>{e.preventDefault();const p=current();if(!p)return;const task=new FormData(e.currentTarget).get('task').trim();if(!task)return;const from=$('#actor').value,to=from==='A'?'B':'A';const draft=`【模拟模板，并非 AI 生成】\n发起方：${party(p,from)}\n接收方：${party(p,to)}\n任务：${task}\n项目目标：${p.goal}\n约定共享范围：${p.scope}\n预期交付与验收：${p.deliverable}\n建议下一步：接收方先检查信息是否在约定范围内，再决定是否批准；任何范围变更均须重新由人确认。`;const h={id:id(),from,to,task,draft,status:'pending'};p.handoffs.push(h);log(p,`${party(p,from)}提交了「${task}」的模拟审批请求`);if(!save()){p.handoffs.pop();p.audit.shift();$('#handoff-error').textContent='浏览器存储不可用，交接未保存。';return}$('#handoff-error').textContent='';e.currentTarget.reset();render()});
+      $('#clear-project').addEventListener('click',()=>{const p=current();if(!p||!confirm(`删除本浏览器中的「${p.name}」及其全部演示记录？此操作不可撤销。`))return;const original=[...state.projects];state.projects=state.projects.filter(x=>x.id!==p.id);if(!save()){state.projects=original;alert('删除未保存，请检查浏览器存储。');return}selected=state.projects[0]?.id||null;render()});render();
+    })();
+  </script>
+</body>
+</html>
