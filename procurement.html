@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="Try the OI EXCHANGE local procurement workflow: demand, invitation, proposal and selection.">
+  <title>Procurement demo — OI EXCHANGE</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .procure-hero{padding-top:65px;padding-bottom:48px}.procure-hero h1{font-size:clamp(36px,5vw,64px);letter-spacing:-.05em}.procure-hero p{max-width:740px}.procure-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}.procure-grid .card{margin:0}.procure-grid .wide{grid-column:1/-1}.procure-grid textarea{min-height:90px}.procure-grid .actions{display:flex;gap:12px;flex-wrap:wrap}.procure-grid .item{overflow-wrap:anywhere}.procure-grid .item p{white-space:pre-wrap}.procure-grid .item small{color:#a5b2c0}.procure-grid .field select{max-width:none}.procure-grid .alert{margin-bottom:0}.procure-grid .empty{padding:10px 0}.stage{color:#b6e6cd;font-size:12px;letter-spacing:.1em;text-transform:uppercase}@media(max-width:800px){.procure-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header><div class="wrap"><a class="brand" href="index.html"><i aria-hidden="true"></i> OI EXCHANGE</a><nav class="nav" aria-label="Main navigation"><a href="index.html">About</a><a href="index.html#demo-workspace">Collaboration demo</a><a class="nav-cta" href="#workflow">Procurement demo</a></nav></div></header>
+  <main id="main" class="wrap">
+    <section class="procure-hero" aria-labelledby="title"><div class="eyebrow">INTERACTIVE DEMO / PROCUREMENT</div><h1 id="title">From requirement to selection.</h1><p class="lead">Create a demand, invite fictional suppliers, switch roles to submit proposals, then make a documented buyer selection. No account or real supplier communication is involved.</p><div class="notice" role="note">Local simulation only: anyone can switch roles, names are not verified, invitations are not sent and selections are not contracts or actual purchasing decisions. Data remains in this browser’s localStorage; do not enter sensitive information. Refresh to inspect what was saved.</div></section>
+    <section id="workflow" class="section" aria-label="Procurement workflow">
+      <div class="procure-grid">
+        <section class="card wide" aria-labelledby="context-title"><h2 id="context-title">Demo context</h2><div class="row"><label class="field">Active demand<select id="demand-select" aria-label="Active demand"></select></label><label class="field">Current demo role<select id="role"><option value="buyer">Buyer</option><option value="supplier">Invited supplier</option></select></label><label class="field">Supplier identity (simulation)<select id="supplier-select" aria-label="Supplier identity"></select></label></div><p id="context" class="small" role="status"></p></section>
+        <section class="card" aria-labelledby="demand-title"><span class="stage">01 / Demand</span><h2 id="demand-title">Describe what is needed</h2><form id="demand-form"><label class="field">Demand title<input name="title" required maxlength="80" placeholder="e.g. Public research brief"></label><label class="field">Buyer name<input name="buyer" required maxlength="80" placeholder="e.g. Example organisation"></label><label class="field">Requirement<textarea name="requirement" required maxlength="600" placeholder="Describe the deliverable"></textarea></label><label class="field">Evaluation criteria<textarea name="criteria" required maxlength="600" placeholder="How will proposals be compared?"></textarea></label><button class="primary" type="submit">Create local demand</button><p id="demand-error" class="alert" role="alert"></p></form></section>
+        <section class="card" aria-labelledby="invitation-title"><span class="stage">02 / Invitation</span><h2 id="invitation-title">Invite a supplier (demo)</h2><p class="small">Add a name to the active demand. This does not send an invitation.</p><form id="invitation-form"><label class="field">Supplier name<input name="supplier" required maxlength="80" placeholder="e.g. Example supplier A"></label><button class="primary" type="submit">Add invitation locally</button><p id="invitation-error" class="alert" role="alert"></p></form><div id="invitations" aria-live="polite"></div></section>
+        <section class="card" aria-labelledby="proposal-title"><span class="stage">03 / Proposal</span><h2 id="proposal-title">Submit a proposal</h2><p class="small">Switch to Invited supplier and select a named invitation above. Only one proposal per supplier per demand.</p><form id="proposal-form"><label class="field">Proposal title<input name="title" required maxlength="80" placeholder="e.g. Research delivery plan"></label><label class="field">Approach and deliverables<textarea name="approach" required maxlength="800" placeholder="How will you meet the requirement and criteria?"></textarea></label><button class="primary" type="submit">Save proposal locally</button><p id="proposal-error" class="alert" role="alert"></p></form></section>
+        <section class="card" aria-labelledby="selection-title"><span class="stage">04 / Selection</span><h2 id="selection-title">Make a documented choice</h2><p class="small">Switch back to Buyer to compare proposals. A selection is final for this local demand.</p><form id="selection-form"><label class="field">Chosen proposal<select id="proposal-select" name="proposal" required></select></label><label class="field">Selection reason<textarea name="reason" required maxlength="500" placeholder="Explain the decision against the criteria"></textarea></label><button class="primary" type="submit">Record demo selection</button><p id="selection-error" class="alert" role="alert"></p></form></section>
+        <section class="card wide" aria-labelledby="review-title"><h2 id="review-title">Review active demand</h2><div id="review" aria-live="polite" class="empty">Create a demand to begin.</div><button id="delete-demand" class="secondary danger" type="button" hidden>Delete active local demand</button></section>
+      </div>
+    </section>
+  </main>
+  <footer class="wrap">OI EXCHANGE · Procurement workflow is a browser-only demonstration; not a live tendering service.</footer>
+  <script src="procurement.js" defer></script>
+</body>
+</html>
