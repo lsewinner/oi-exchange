@@ -112,62 +112,83 @@
     });
   }
   $('actor').addEventListener('change', () => { render(); note('Demo role changed; this is not identity verification.'); });
-  $('compare-package').addEventListener('change', renderCompare);
   $('project-form').addEventListener('submit', event => {
     event.preventDefault();
     if (!buyerOnly()) return;
-    const data = new FormData(event.currentTarget);
-    const name = tidy(data.get('name'), 80), brief = tidy(data.get('brief'), 600);
-    if (!name || !brief) return;
-    state.project = { name, brief };
+    const requirement = tidy(new FormData(event.currentTarget).get('requirement'), 500);
+    if (!requirement) { note('Enter a fictional requirement first.'); return; }
+    if (state.requirement === requirement) { note('This requirement is already set.'); return; }
+    if (state.requirement && (state.packages.length || state.invitations.length || state.proposals.length) &&
+        !confirm('Changing the requirement clears existing packages, invitations, proposals and selections. Continue?')) return;
+    state = empty();
+    state.requirement = requirement;
+    eventLog('Set demo project requirement');
     event.currentTarget.reset();
-    persist();
+    persist('Requirement recorded.');
   });
   $('package-form').addEventListener('submit', event => {
     event.preventDefault();
-    if (!buyerOnly()) return;
+    if (!buyerOnly() || !state.requirement.trim()) return;
     const data = new FormData(event.currentTarget);
-    const title = tidy(data.get('title'), 80), criteria = tidy(data.get('criteria'), 400);
-    if (!title || !criteria) return;
-    state.packages.push({ id: newId(), title, criteria });
+    const title = tidy(data.get('title'), 90), criterion = tidy(data.get('criterion'), 250);
+    if (!title || !criterion) { note('Enter a package title and acceptance criterion.'); return; }
+    state.packages.push({ id: newId(), title, criterion });
+    eventLog('Added work package: ' + title);
     event.currentTarget.reset();
-    persist();
+    persist('Work package recorded.');
   });
   $('invite-form').addEventListener('submit', event => {
     event.preventDefault();
-    if (!buyerOnly()) return;
-    const name = tidy(new FormData(event.currentTarget).get('agency'), 80);
-    if (!name) return;
-    state.agencies.push({ id: newId(), name });
+    if (!buyerOnly() || !state.requirement.trim() || !state.packages.length) return;
+    const orgId = tidy(new FormData(event.currentTarget).get('organisation'), 30);
+    if (!orgs.some(o => o.id === orgId) || state.invitations.includes(orgId)) { note('Choose an organisation that has not yet been invited.'); return; }
+    state.invitations.push(orgId);
+    eventLog('Recorded local invitation: ' + orgName(orgId));
     event.currentTarget.reset();
-    persist();
+    persist('Demo invitation recorded; nothing was sent.');
   });
   $('proposal-form').addEventListener('submit', event => {
     event.preventDefault();
-    if (view() !== 'agency') return;
+    const orgId = actor();
+    if (orgId === 'buyer' || !state.invitations.includes(orgId) || !state.requirement.trim()) { note('Select an invited fictional supplier role first.'); return; }
     const data = new FormData(event.currentTarget);
-    const agencyId = $('agency-select').value;
-    const packageId = tidy(data.get('packageId'), 120);
-    const approach = tidy(data.get('approach'), 500), timeline = tidy(data.get('timeline'), 120), quote = tidy(data.get('quote'), 120);
-    if (!state.agencies.some(a => a.id === agencyId) || !state.packages.some(p => p.id === packageId) || !approach || !timeline || !quote) { note('先选有效的机构和工作包，并填写完整提案。'); return; }
-    state.proposals.push({ id: newId(), agencyId, packageId, approach, timeline, quote });
+    const packageId = tidy(data.get('package'), 120);
+    const approach = tidy(data.get('approach'), 500), evidence = tidy(data.get('evidence'), 350);
+    const conditions = tidy(data.get('conditions'), 350), price = Number(data.get('price'));
+    if (!state.packages.some(p => p.id === packageId) || !approach || !evidence || !conditions ||
+        data.get('price') === '' || !Number.isFinite(price) || price < 0 || price > 100000000 || Math.round(price * 100) !== price * 100) {
+      note('Select a valid package and enter the approach, GBP quote, basis and conditions.'); return;
+    }
+    if (state.proposals.some(p => p.packageId === packageId && p.orgId === orgId)) {
+      note('This supplier already has a proposal for this package in the demo.'); return;
+    }
+    state.proposals.push({ id: newId(), packageId, orgId, approach, price, evidence, conditions });
+    eventLog('Recorded proposal: ' + orgName(orgId) + ' / ' + pkgName(packageId));
     event.currentTarget.reset();
-    persist();
+    persist('Fictional proposal recorded.');
   });
   $('decision-form').addEventListener('submit', event => {
     event.preventDefault();
     if (!buyerOnly()) return;
-    const packageId = $('compare-package').value, proposalId = $('decision-proposal').value;
-    const reason = tidy(new FormData(event.currentTarget).get('reason'), 400);
-    if (!state.proposals.some(p => p.packageId === packageId && p.id === proposalId) || !reason) { note('请选择该工作包的提案并说明理由。'); return; }
-    state.decisions[packageId] = { proposalId, reason };
+    const data = new FormData(event.currentTarget);
+    const proposalId = tidy(data.get('proposal'), 120), reason = tidy(data.get('reason'), 350);
+    const proposal = state.proposals.find(p => p.id === proposalId && state.packages.some(pkg => pkg.id === p.packageId));
+    if (!proposal || !reason || data.get('ack') !== 'on') { note('Choose a valid proposal, explain the choice and confirm the demo disclaimer.'); return; }
+    if (!confirm('Record this simulated buyer selection? No organisation will be notified or bound.')) return;
+    state.decisions[proposal.packageId] = { proposalId, reason };
+    eventLog('Simulated buyer selection: ' + orgName(proposal.orgId) + ' / ' + pkgName(proposal.packageId));
     event.currentTarget.reset();
-    persist();
+    persist('Simulated selection recorded; no contract or transaction was created.');
   });
-  $('reset-demo').addEventListener('click', () => {
-    if (!buyerOnly() || !confirm('清除本浏览器的采购演示记录并恢复虚构示例？')) return;
+  $('example').addEventListener('click', () => {
+    if (!buyerOnly() || (state.requirement && !confirm('Replace this local demo with the fictional example?'))) return;
     state = example();
-    persist();
+    persist('Fictional example loaded.');
+  });
+  $('reset').addEventListener('click', () => {
+    if (!buyerOnly() || !confirm('Clear all local procurement demo data in this browser?')) return;
+    state = empty();
+    persist('Local procurement demo reset.');
   });
   render();
 })();
