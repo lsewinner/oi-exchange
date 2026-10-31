@@ -1,59 +1,54 @@
 /* OI EXCHANGE procurement concept. Local browser simulation only; no network calls. */
 (() => {
   'use strict';
-  const key = 'oi-exchange-procurement-demo-v1';
+  const key = 'oi-exchange-procurement-demo-v2';
+  const orgs = [{ id: 'atlas', name: 'Atlas Sourcing' }, { id: 'meridian', name: 'Meridian Research' }, { id: 'north', name: 'North Logistics' }];
+  const empty = () => ({ requirement: '', packages: [], invitations: [], proposals: [], decisions: {}, events: [] });
   const example = () => ({
-    project: { name: '虚构案例 · 社区空间研究', brief: '比较社区空间调研方案。所有机构、报价与决定均为虚构演示。' },
-    packages: [{ id: 'p1', title: '访谈与需求梳理', criteria: '交付访谈提纲、匿名化发现摘要。' }, { id: 'p2', title: '可行性方案', criteria: '交付方案比较和风险说明。' }],
-    agencies: [{ id: 'a1', name: '示例机构 A' }, { id: 'a2', name: '示例机构 B' }],
-    proposals: [{ id: 'r1', packageId: 'p1', agencyId: 'a1', approach: '线上访谈与主题归纳（示例）', timeline: '4 周（示例）', quote: '虚构报价 A' }, { id: 'r2', packageId: 'p1', agencyId: 'a2', approach: '现场观察与小组讨论（示例）', timeline: '6 周（示例）', quote: '虚构报价 B' }],
-    decisions: {}
+    requirement: 'Fictional community-space research procurement. Compare scoped proposals; no real tender exists.',
+    packages: [{ id: 'p1', title: 'Stakeholder interviews', criterion: 'Interview plan and anonymised findings summary.' }, { id: 'p2', title: 'Feasibility options', criterion: 'Options comparison with assumptions and risks.' }],
+    invitations: ['atlas', 'meridian'],
+    proposals: [
+      { id: 'r1', packageId: 'p1', orgId: 'atlas', approach: 'Remote interviews and thematic synthesis (fictional).', price: 2400, evidence: 'Assumes eight interviews; buyer reviews interview plan.', conditions: 'Recruitment and translation excluded.' },
+      { id: 'r2', packageId: 'p1', orgId: 'meridian', approach: 'Workshop and observations (fictional).', price: 3100, evidence: 'Assumes one workshop and two site visits.', conditions: 'Travel costs excluded.' }
+    ],
+    decisions: {}, events: [{ action: 'Loaded fictional example', at: new Date().toISOString() }]
   });
   const $ = id => document.getElementById(id);
-  const tidy = (value, max) => String(value || '').trim().slice(0, max);
+  const tidy = (value, max) => String(value ?? '').trim().slice(0, max);
   const newId = () => 'local-' + Date.now() + '-' + Math.random().toString(36).slice(2, 10);
-  let state;
+  const orgName = id => orgs.find(o => o.id === id)?.name || 'Unknown organisation';
+  const pkgName = id => state.packages.find(p => p.id === id)?.title || 'Unknown package';
+  let state = empty();
   try {
     const saved = JSON.parse(localStorage.getItem(key));
-    state = saved && saved.project && Array.isArray(saved.packages) && Array.isArray(saved.agencies) && Array.isArray(saved.proposals) && saved.decisions && typeof saved.decisions === 'object' ? saved : example();
-  } catch (_) { state = example(); }
+    if (saved && typeof saved.requirement === 'string' && Array.isArray(saved.packages) && Array.isArray(saved.invitations) && Array.isArray(saved.proposals) && saved.decisions && typeof saved.decisions === 'object' && Array.isArray(saved.events)) state = saved;
+  } catch (_) { /* Private mode or invalid local data: start fresh. */ }
   function node(tag, text, className) {
-    const item = document.createElement(tag);
-    if (text !== undefined) item.textContent = text;
-    if (className) item.className = className;
-    return item;
+    const el = document.createElement(tag);
+    if (text !== undefined) el.textContent = String(text);
+    if (className) el.className = className;
+    return el;
   }
   function line(parent, title, value) {
     const p = node('p');
-    p.append(node('strong', title + '：'), document.createTextNode(value || '—'));
+    p.append(node('strong', title + ': '), document.createTextNode(String(value ?? '—')));
     parent.append(p);
   }
-  function options(select, data, label) {
+  function options(select, entries, placeholder) {
     const before = select.value;
     select.replaceChildren();
-    if (!data.length) {
-      const option = node('option', '暂无' + label);
-      option.value = '';
-      select.append(option);
-    } else data.forEach(item => {
-      const option = node('option', item.title || item.name || item.approach);
-      option.value = item.id;
-      select.append(option);
-    });
-    if (data.some(item => item.id === before)) select.value = before;
+    const first = node('option', placeholder); first.value = ''; select.append(first);
+    entries.forEach(({ id, label }) => { const o = node('option', label); o.value = id; select.append(o); });
+    if (entries.some(entry => entry.id === before)) select.value = before;
   }
-  function note(text) { $('status').textContent = text; }
-  function persist() {
-    try { localStorage.setItem(key, JSON.stringify(state)); note('已保存到本浏览器；没有发送给任何机构。'); }
-    catch (_) { note('浏览器无法保存数据；当前页面仍可演示，刷新后可能丢失。'); }
-    render();
+  function note(text) { $('message').textContent = text; }
+  function eventLog(action) { state.events.push({ action, at: new Date().toISOString() }); }
+  function persist(message) {
+    try { localStorage.setItem(key, JSON.stringify(state)); render(); note(message + ' Saved only in this browser.'); }
+    catch (_) { render(); note(message + ' Browser storage unavailable; refresh may erase changes.'); }
   }
-  function view() { return $('view').value; }
-  function buyerOnly() { if (view() !== 'buyer') { note('请先切换到采购方演示视角。'); return false; } return true; }
-  function proposalOptions() {
-    const entries = state.proposals.filter(p => p.packageId === $('compare-package').value).map(p => ({ id: p.id, title: (state.agencies.find(a => a.id === p.agencyId)?.name || '未知机构') + ' · ' + p.approach }));
-    options($('decision-proposal'), entries, '提案');
-  }
+  function buyerOnly() { if ($('actor').value !== 'buyer') { note('Switch to the simulated buyer role first.'); return false; } return true; }
   function renderCompare() {
     const box = $('compare-list');
     box.replaceChildren();
