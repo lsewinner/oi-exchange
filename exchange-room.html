@@ -4,38 +4,37 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="color-scheme" content="dark">
-  <meta name="description" content="OI EXCHANGE: a fictional, browser-only project procurement Exchange Room demo.">
-  <title>Exchange Room | OI EXCHANGE</title>
+  <meta name="description" content="Explore a fictional procurement opportunity from intent to a simulated human decision. Local demo only.">
+  <title>Exchange Room · OI EXCHANGE demo</title>
   <link rel="stylesheet" href="exchange-room.css">
   <script src="exchange-room.js" defer></script>
 </head>
 <body>
-  <a class="skip" href="#room">Skip to Exchange Room</a>
-  <header class="topbar"><a class="brand" href="index.html">◇ OI EXCHANGE</a><span>EXCHANGE ROOM <span class="demo-label">/ FICTIONAL DEMO</span></span><a class="home" href="index.html">← Back to the website</a></header>
-  <main id="room">
-    <div class="intro"><div><p class="eyebrow">01 / PROJECT PROCUREMENT</p><h1>From intent to <em>human decision.</em></h1><p>One need. Several capable organisations. A proposal you can inspect before anyone approves it.</p></div><div class="room-tag">Local simulation · no real invitations or offers</div></div>
-    <div class="notice" role="note"><strong>Demo boundary.</strong> All organisations and transactions here are fictional. Role switching is not authentication. Invites, prices, proposals, clarifications and approvals remain in this browser only; no AI, matching service, signatures, payments or external commitments are made. Do not enter real or sensitive information.</div>
-    <p id="storage-status" class="error" role="alert" aria-live="assertive"></p>
-    <div class="room-grid">
-      <aside class="column opportunity" aria-labelledby="opportunity-title"><div class="column-head"><span class="eyebrow">01 / OPPORTUNITY</span><h2 id="opportunity-title">What needs to happen</h2><p>Need, work packages and milestones.</p></div>
-        <div class="pane" id="brief"></div>
-        <div class="pane"><h3>Work packages</h3><label for="package-select" class="field-label">Active work package</label><select id="package-select" aria-label="Select a work package"></select><div id="packages"></div></div>
-        <div class="pane"><h3>How the demo moves</h3><ol class="steps"><li>Define a need and work package</li><li>Buyer selects fictional organisations to invite</li><li>Invited organisations clarify and submit proposals</li><li>Buyer compares and records a simulated approval</li></ol></div>
-        <details class="pane"><summary>Start a new fictional request</summary><p class="fine">Replaces the current local demo after confirmation.</p><form id="request-form"><label class="field-label">Project title<input name="title" required maxlength="90" placeholder="e.g. Regional sourcing study"></label><label class="field-label">Need<textarea name="brief" required maxlength="500" placeholder="What outcome do you need?"></textarea></label><label class="field-label">First work package<input name="package" required maxlength="90" placeholder="e.g. Supplier landscape"></label><label class="field-label">Acceptance criteria<textarea name="criteria" required maxlength="400" placeholder="What would count as a useful deliverable?"></textarea></label><button class="button primary" type="submit">Create local request</button></form></details>
+  <a class="skip" href="#main">Skip to Exchange Room</a>
+  <header class="bar"><a class="brand" href="./index.html">◇ OI EXCHANGE</a><span class="bar-label">EXCHANGE ROOM / PROCUREMENT</span><a class="back" href="./index.html">← About the concept</a></header>
+  <main id="main">
+    <div class="mast"><div><p class="eyebrow">CONCEPT PROTOTYPE / FICTIONAL DATA</p><h1>From intent <em>to agreement.</em></h1><p>One procurement opportunity. Multiple institutional capabilities. A proposal that moves forward only after a visible human decision.</p></div><span class="badge">Local browser simulation · not a live transaction</span></div>
+    <div class="warning" role="note"><strong>Demo only.</strong> Organisations, offers and events here are fictional or entered in this browser. There are no accounts, invitations, verification, AI agents, payments or external messages. Switching or selecting an organisation does not prove authority. Do not enter real contracts or sensitive data.</div>
+    <div class="room">
+      <aside class="panel" aria-labelledby="opportunity-title"><div class="panel-head"><span>01 / OPPORTUNITY</span><h2 id="opportunity-title">Demand & work packages</h2><p>Start with the intent; define work before inviting anyone.</p></div>
+        <form id="need-form"><label>Opportunity title<input name="title" maxlength="90" required placeholder="e.g. Source a renewable energy component"></label><label>Outcome sought<textarea name="outcome" maxlength="600" required placeholder="What should this procurement deliver?"></textarea></label><label>Work packages · one per line<textarea name="packages" maxlength="600" required placeholder="Supplier discovery&#10;Technical evaluation&#10;Delivery plan"></textarea></label><button type="submit">Create local opportunity</button></form>
+        <button id="example" type="button" class="ghost">Load fictional procurement example</button><div id="need-view" class="stack" aria-live="polite"></div>
+        <div class="divider"><h3>Capability directory <small>fictional</small></h3><p>Rule-of-thumb matching by work package, not a verified supplier search.</p><div id="directory"></div></div>
       </aside>
-      <section class="column collaboration" aria-labelledby="collaboration-title"><div class="column-head"><span class="eyebrow">02 / COLLABORATION</span><h2 id="collaboration-title">A proposal takes shape</h2><p>Questions, conditions and comparable offers—not a chatbot transcript.</p></div>
-        <div class="pane"><h3>Open questions</h3><div id="questions" aria-live="polite"></div><form id="question-form" class="hidden"><label class="field-label">Ask the buyer to clarify this package<textarea name="question" required maxlength="350" placeholder="What do you need to know before proposing?"></textarea></label><button class="button secondary" type="submit">Record demo question</button></form></div>
-        <div class="pane"><div class="row"><h3>Proposals</h3><span id="proposal-count" class="chip"></span></div><p class="fine">Illustrative prices and terms; no bid is sent outside this browser.</p><div id="proposals" aria-live="polite"></div>
-          <form id="proposal-form" class="hidden"><h4>Submit a structured demo proposal</h4><label class="field-label">Indicative price (GBP)<input name="price" type="number" min="1" max="99999999" step="1" required placeholder="e.g. 8500"></label><label class="field-label">Delivery timeline<input name="delivery" required maxlength="100" placeholder="e.g. Four weeks after scope approval"></label><label class="field-label">Approach and conditions<textarea name="approach" required maxlength="500" placeholder="What would you deliver, and under which conditions?"></textarea></label><button class="button primary" type="submit">Submit local proposal</button></form></div>
+      <section class="panel center" aria-labelledby="activity-title"><div class="panel-head"><span>02 / COLLABORATION</span><h2 id="activity-title">How the offer takes shape</h2><p>Structured proposals and clarifications, not an agent chat feed.</p></div>
+        <div class="stepper" id="stepper" aria-label="Demo progress"></div>
+        <div class="module"><h3>Submit a structured proposal <small>simulation</small></h3><p>The selected organisation is a demo role, not an authenticated party. Nothing is transmitted.</p><form id="proposal-form"><label>Fictional organisation<select name="org" id="proposal-org" required></select></label><label>Work package<select name="package" id="proposal-package" required></select></label><label>Approach & evidence<textarea name="approach" maxlength="500" required placeholder="Describe the method and its basis"></textarea></label><div class="two"><label>Indicative price · USD<input name="price" type="number" min="1" max="99999999" step="1" required></label><label>Estimated days<input name="days" type="number" min="1" max="3650" step="1" required></label></div><label>Assumptions & conditions<textarea name="conditions" maxlength="400" required placeholder="What must be true for this offer to hold?"></textarea></label><button type="submit">Record demo proposal</button></form></div>
+        <div class="module"><h3>Proposals & comparison</h3><p>Compare indicative terms and inspect their stated basis before deciding.</p><div id="proposals" class="stack" aria-live="polite"></div></div>
+        <div class="module"><h3>Opportunity timeline</h3><ol id="timeline" class="timeline" aria-live="polite"></ol></div>
       </section>
-      <aside class="column trust" aria-labelledby="trust-title"><div class="column-head"><span class="eyebrow">03 / TRUST & DECISIONS</span><h2 id="trust-title">Who can decide?</h2><p>Demo roles, invitations and a visible human approval boundary.</p></div>
-        <div class="pane"><h3>Acting as</h3><label class="field-label" for="actor-select">Switch demo role<select id="actor-select"><option value="buyer">Buyer (simulated)</option><option value="atlas">Atlas Research (fictional)</option><option value="meridian">Meridian Advisory (fictional)</option><option value="northstar">Northstar Data (fictional)</option></select></label><p class="fine">Anyone can switch roles. This does not prove affiliation, authority or permission.</p><div id="authority" class="authority" role="status"></div></div>
-        <div class="pane"><h3>Organisations & invitations</h3><p class="fine">Illustrative capability labels; buyer manually chooses whom to invite. No automatic matching.</p><div id="organisations"></div></div>
-        <div class="pane"><h3>Human decision boundary</h3><div id="decision" role="status"></div><p class="fine">A demo approval records a choice, not acceptance of a real quote, contract or payment.</p></div>
-        <div class="pane"><h3>Local activity</h3><ol id="events" class="events"></ol><button id="reset-demo" class="button secondary" type="button">Reset fictional demo</button></div>
+      <aside class="panel" aria-labelledby="decision-title"><div class="panel-head"><span>03 / TRUST & DECISION</span><h2 id="decision-title">Authority stays human</h2><p>See the boundary before a commitment is made.</p></div>
+        <div class="trust"><strong>What this demo can show</strong><p>Local opportunity, mock invitations, proposal comparison and a simulated decision record.</p><strong>What it cannot verify</strong><p>Identity, organisational mandate, credentials, actual quotes or consent from any institution.</p></div>
+        <div class="module"><h3>Decision gate</h3><p id="gate" role="status">Create an opportunity to begin.</p><form id="decision-form"><label>Proposal to select<select id="decision-proposal" name="proposal" required></select></label><label>Reason & basis<textarea name="reason" maxlength="400" required placeholder="Explain why this option was selected"></textarea></label><label class="check"><input type="checkbox" name="ack" required><span>I understand this is only a local simulation; it does not accept an actual offer or bind an organisation.</span></label><button type="submit">Record human decision (demo)</button></form><div id="decision-view" aria-live="polite"></div></div>
+        <div class="module"><h3>Agent / Oxford Bot boundary</h3><p>Future agents may discover opportunities, draft structured offers and report progress only within granted permissions. Publishing, accepting an offer, contracting and payment require explicit human authorisation. No agent or Bot connection exists in this demo.</p></div>
+        <button id="reset" type="button" class="danger">Clear this browser’s demo</button>
       </aside>
     </div>
   </main>
-  <footer>OI EXCHANGE · Concept prototype · Browser-only demo · No live transactions</footer>
+  <footer>OI EXCHANGE / Exchange Room concept · No production service or public API is connected.</footer>
 </body>
 </html>
