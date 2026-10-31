@@ -57,54 +57,61 @@
   function setControls(form, enabled) {
     form.querySelectorAll('input,textarea,select,button').forEach(control => { control.disabled = !enabled; });
   }
-  function renderCompare() {
-    const box = $('compare-list');
-    box.replaceChildren();
-    const packageId = $('compare-package').value;
-    const entries = state.proposals.filter(p => p.packageId === packageId);
-    if (!entries.length) box.append(node('p', '该工作包还没有提案。', 'muted'));
-    entries.forEach(p => {
-      const card = node('article', undefined, 'entry');
-      card.append(node('h3', state.agencies.find(a => a.id === p.agencyId)?.name || '未知机构'));
-      line(card, '方法', p.approach);
-      line(card, '周期', p.timeline);
-      line(card, '报价', p.quote);
-      box.append(card);
-    });
-    proposalOptions();
-    const decision = state.decisions[packageId];
-    $('decision-current').textContent = decision && entries.some(p => p.id === decision.proposalId)
-      ? '已记录的人工选择：' + (state.agencies.find(a => a.id === entries.find(p => p.id === decision.proposalId).agencyId)?.name || '未知机构') + '；理由：' + decision.reason + '。可重新选择。'
-      : '尚未记录人工选择。系统不自动评分、排序或授予合同。';
-  }
   function render() {
-    $('project-name').textContent = state.project.name;
-    $('project-brief').textContent = state.project.brief;
-    $('package-list').replaceChildren();
-    state.packages.forEach(p => {
-      const entry = node('article', undefined, 'entry');
-      entry.append(node('h3', p.title));
-      line(entry, '验收标准', p.criteria);
-      $('package-list').append(entry);
+    const buyer = actor() === 'buyer';
+    const invited = state.invitations.includes(actor());
+    const ready = !!state.requirement.trim();
+    const packages = state.packages.filter(p => p && typeof p.id === 'string' && typeof p.title === 'string');
+    const proposals = state.proposals.filter(p => p && packages.some(pkg => pkg.id === p.packageId) && orgs.some(o => o.id === p.orgId));
+    const packBox = $('packages');
+    packBox.replaceChildren(node('p', ready ? 'Current requirement: ' + state.requirement : 'No requirement set. Set a fictional requirement first.', 'muted'));
+    packages.forEach(p => {
+      const card = node('article', undefined, 'item');
+      card.append(node('h3', p.title)); line(card, 'Acceptance criterion', p.criterion);
+      packBox.append(card);
     });
-    $('agency-list').replaceChildren();
-    state.agencies.forEach(a => {
-      const entry = node('li', a.name + ' · 仅为本地模拟邀请，未发送通知');
-      $('agency-list').append(entry);
+    options($('invite-org'), orgs.filter(o => !state.invitations.includes(o.id)).map(o => ({ id: o.id, label: o.name })), 'Choose an organisation');
+    const inviteBox = $('invites'); inviteBox.replaceChildren();
+    if (!state.invitations.length) inviteBox.append(node('p', 'No simulated invitations yet.', 'muted'));
+    state.invitations.forEach(id => inviteBox.append(node('p', orgName(id) + ' · invitation recorded locally; nothing was sent.')));
+    options($('proposal-package'), packages.map(p => ({ id: p.id, label: p.title })), 'Choose a work package');
+    const compare = $('comparison'); compare.replaceChildren();
+    if (!packages.length) compare.append(node('p', 'Add a work package to compare proposals.', 'muted'));
+    packages.forEach(pkg => {
+      const block = node('div', undefined, 'item'); block.append(node('h3', pkg.title));
+      line(block, 'Acceptance criterion', pkg.criterion);
+      const entries = proposals.filter(p => p.packageId === pkg.id);
+      if (!entries.length) block.append(node('p', 'No proposals recorded for this package.', 'muted'));
+      entries.forEach(p => {
+        const detail = node('details', undefined, 'item');
+        detail.append(node('summary', orgName(p.orgId) + ' · GBP ' + Number(p.price).toFixed(2)));
+        line(detail, 'Approach', p.approach); line(detail, 'Basis / evidence', p.evidence);
+        line(detail, 'Conditions / exclusions', p.conditions);
+        block.append(detail);
+      });
+      const selected = state.decisions[pkg.id];
+      const picked = entries.find(p => p.id === selected?.proposalId);
+      block.append(node('p', picked ? 'Simulated buyer choice: ' + orgName(picked.orgId) + ' · Reason: ' + selected.reason : 'No simulated selection. No automatic ranking or contract award.', 'small'));
+      compare.append(block);
     });
-    options($('agency-select'), state.agencies, '机构');
-    options($('proposal-package'), state.packages, '工作包');
-    options($('compare-package'), state.packages, '工作包');
-    const allowed = view() === 'buyer';
-    document.querySelectorAll('[data-buyer]').forEach(form => form.querySelectorAll('input,textarea,select,button').forEach(control => { control.disabled = !allowed; }));
-    document.querySelectorAll('[data-agency]').forEach(form => form.querySelectorAll('input,textarea,select,button').forEach(control => { control.disabled = allowed; }));
-    $('decision-proposal').disabled = !allowed;
-    $('agency-select').disabled = allowed;
-    $('compare-package').disabled = false;
-    $('view-hint').textContent = allowed ? '采购方可编辑需求、模拟邀请并记录决定。切换视角不代表真实授权。' : '机构视角可提交本地模拟提案；不代表受邀机构已登录或确认。';
-    renderCompare();
+    options($('decision-proposal'), proposals.map(p => ({ id: p.id, label: pkgName(p.packageId) + ' · ' + orgName(p.orgId) + ' · GBP ' + Number(p.price).toFixed(2) })), 'Choose a proposal');
+    setControls($('project-form'), buyer);
+    setControls($('package-form'), buyer && ready);
+    setControls($('invite-form'), buyer && ready && !!packages.length && state.invitations.length < orgs.length);
+    setControls($('proposal-form'), !buyer && ready && invited && !!packages.length);
+    setControls($('decision-form'), buyer && !!proposals.length);
+    $('example').disabled = !buyer; $('reset').disabled = !buyer;
+    $('authority').textContent = buyer
+      ? 'Simulated buyer: can set the requirement, add packages, record invitations and select a proposal. Nothing is sent or binding.'
+      : orgName(actor()) + (invited ? ': invited locally; may record a proposal for a work package.' : ': not invited; proposal submission is unavailable.');
+    const events = $('events'); events.replaceChildren();
+    if (!state.events.length) events.append(node('li', 'No local actions recorded yet.'));
+    state.events.slice(-30).reverse().forEach(e => {
+      const date = new Date(e.at);
+      events.append(node('li', (Number.isNaN(date.getTime()) ? 'Unknown time' : date.toLocaleString()) + ' · ' + e.action));
+    });
   }
-  $('view').addEventListener('change', render);
+  $('actor').addEventListener('change', () => { render(); note('Demo role changed; this is not identity verification.'); });
   $('compare-package').addEventListener('change', renderCompare);
   $('project-form').addEventListener('submit', event => {
     event.preventDefault();
