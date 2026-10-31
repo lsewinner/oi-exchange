@@ -1,4 +1,4 @@
-/* OI EXCHANGE procurement concept. Local browser simulation only; no network calls. */
+/* OI EXCHANGE: fictional procurement simulation; browser storage only. */
 (() => {
   'use strict';
   const key = 'oi-exchange-procurement-demo-v2';
@@ -19,11 +19,12 @@
   const newId = () => 'local-' + Date.now() + '-' + Math.random().toString(36).slice(2, 10);
   const orgName = id => orgs.find(o => o.id === id)?.name || 'Unknown organisation';
   const pkgName = id => state.packages.find(p => p.id === id)?.title || 'Unknown package';
+  const actor = () => $('actor').value;
   let state = empty();
   try {
     const saved = JSON.parse(localStorage.getItem(key));
-    if (saved && typeof saved.requirement === 'string' && Array.isArray(saved.packages) && Array.isArray(saved.invitations) && Array.isArray(saved.proposals) && saved.decisions && typeof saved.decisions === 'object' && Array.isArray(saved.events)) state = saved;
-  } catch (_) { /* Private mode or invalid local data: start fresh. */ }
+    if (saved && typeof saved.requirement === 'string' && Array.isArray(saved.packages) && Array.isArray(saved.invitations) && Array.isArray(saved.proposals) && saved.decisions && !Array.isArray(saved.decisions) && typeof saved.decisions === 'object' && Array.isArray(saved.events)) state = saved;
+  } catch (_) { /* Storage may be unavailable. */ }
   function node(tag, text, className) {
     const el = document.createElement(tag);
     if (text !== undefined) el.textContent = String(text);
@@ -48,7 +49,14 @@
     try { localStorage.setItem(key, JSON.stringify(state)); render(); note(message + ' Saved only in this browser.'); }
     catch (_) { render(); note(message + ' Browser storage unavailable; refresh may erase changes.'); }
   }
-  function buyerOnly() { if ($('actor').value !== 'buyer') { note('Switch to the simulated buyer role first.'); return false; } return true; }
+  function buyerOnly() {
+    if (actor() === 'buyer') return true;
+    note('Switch to the simulated buyer role first.');
+    return false;
+  }
+  function setControls(form, enabled) {
+    form.querySelectorAll('input,textarea,select,button').forEach(control => { control.disabled = !enabled; });
+  }
   function renderCompare() {
     const box = $('compare-list');
     box.replaceChildren();
